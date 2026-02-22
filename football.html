@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Web League</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-green-900 flex items-center justify-center min-h-screen">
+
+<!-- Start Screen -->
+<div id="startScreen" class="absolute inset-0 bg-black bg-opacity-80 flex flex-col items-center justify-center text-white z-10">
+    <h1 class="text-5xl font-bold mb-6">⚽ DREAM WEB LEAGUE</h1>
+    <button onclick="startGame()" 
+        class="bg-yellow-400 text-black px-10 py-4 rounded-xl text-xl font-bold hover:scale-110 transition">
+        START MATCH
+    </button>
+</div>
+
+<!-- Game Container -->
+<div class="relative">
+    <!-- Scoreboard -->
+    <div class="absolute top-4 left-1/2 transform -translate-x-1/2 
+        bg-black bg-opacity-70 text-white px-8 py-3 rounded-xl text-2xl font-bold">
+        <span id="score">0</span> - AI
+        <span class="ml-6">⏱ <span id="timer">60</span>s</span>
+    </div>
+
+    <canvas id="gameCanvas" width="1000" height="600" 
+        class="border-4 border-white rounded-xl shadow-2xl"></canvas>
+</div>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+let player = {x:200, y:300, size:20, speed:5};
+let ball = {x:500, y:300, size:10, vx:0, vy:0};
+let score = 0;
+let timeLeft = 60;
+let gameRunning = false;
+
+function drawField(){
+    ctx.fillStyle="#15803d";
+    ctx.fillRect(0,0,1000,600);
+
+    ctx.strokeStyle="white";
+    ctx.lineWidth=4;
+
+    ctx.strokeRect(0,0,1000,600);
+
+    ctx.beginPath();
+    ctx.moveTo(500,0);
+    ctx.lineTo(500,600);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(500,300,80,0,Math.PI*2);
+    ctx.stroke();
+
+    // Goal
+    ctx.strokeRect(950,250,50,100);
+}
+
+function drawPlayer(){
+    ctx.fillStyle="blue";
+    ctx.beginPath();
+    ctx.arc(player.x, player.y, player.size, 0, Math.PI*2);
+    ctx.fill();
+}
+
+function drawBall(){
+    ctx.fillStyle="white";
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.size, 0, Math.PI*2);
+    ctx.fill();
+}
+
+function update(){
+    if(!gameRunning) return;
+
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    ball.vx *= 0.98;
+    ball.vy *= 0.98;
+
+    let dx = player.x - ball.x;
+    let dy = player.y - ball.y;
+    let dist = Math.sqrt(dx*dx + dy*dy);
+
+    if(dist < 30){
+        ball.vx = dx * 0.2;
+        ball.vy = dy * 0.2;
+    }
+
+    if(ball.x > 950 && ball.y > 250 && ball.y < 350){
+        score++;
+        document.getElementById("score").innerText = score;
+        resetBall();
+    }
+}
+
+function resetBall(){
+    ball.x = 500;
+    ball.y = 300;
+    ball.vx = 0;
+    ball.vy = 0;
+}
+
+function gameLoop(){
+    ctx.clearRect(0,0,1000,600);
+    drawField();
+    drawPlayer();
+    drawBall();
+    update();
+    requestAnimationFrame(gameLoop);
+}
+
+function startGame(){
+    document.getElementById("startScreen").style.display="none";
+    gameRunning = true;
+    gameLoop();
+    startTimer();
+}
+
+function startTimer(){
+    let timerInterval = setInterval(()=>{
+        if(!gameRunning) return;
+        timeLeft--;
+        document.getElementById("timer").innerText = timeLeft;
+
+        if(timeLeft <= 0){
+            gameRunning = false;
+            clearInterval(timerInterval);
+            alert("Match Finished! Final Score: " + score);
+            location.reload();
+        }
+    },1000);
+}
+
+document.addEventListener("keydown", function(e){
+    if(e.key==="ArrowUp") player.y -= player.speed;
+    if(e.key==="ArrowDown") player.y += player.speed;
+    if(e.key==="ArrowLeft") player.x -= player.speed;
+    if(e.key==="ArrowRight") player.x += player.speed;
+});
+</script>
+
+</body>
+</html>
