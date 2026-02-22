@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animated Commerce Page</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+/* Animations */
+@keyframes fadeInUp {
+  0% { opacity:0; transform: translateY(20px); }
+  100% { opacity:1; transform: translateY(0); }
+}
+
+.animate-fadeUp {
+  animation: fadeInUp 1s ease forwards;
+}
+
+.popover {
+  display:none;
+  position:absolute;
+  background:white;
+  border:2px solid #333;
+  padding:10px;
+  border-radius:8px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.3);
+  z-index:50;
+}
+</style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Navbar -->
+<nav class="fixed top-0 w-full bg-white shadow z-50">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-indigo-600">ShopX</h1>
+    <div class="flex gap-6">
+      <a href="#section1" class="hover:text-indigo-500 transition">Home</a>
+      <a href="#section2" class="hover:text-indigo-500 transition">Products</a>
+      <a href="#section3" class="hover:text-indigo-500 transition">Deals</a>
+      <a href="#section4" class="hover:text-indigo-500 transition">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<div class="pt-24">
+
+<!-- Hero Section -->
+<section id="section1" class="relative bg-indigo-600 text-white flex items-center justify-center h-screen overflow-hidden">
+  <img src="https://source.unsplash.com/1200x600/?shopping,market" class="absolute w-full h-full object-cover opacity-40">
+  <div class="relative text-center animate-fadeUp">
+    <h2 class="text-5xl font-bold mb-4">Welcome to ShopX</h2>
+    <p class="text-xl mb-6">The ultimate shopping experience online</p>
+    <button class="bg-yellow-400 px-6 py-3 rounded-lg text-black font-bold hover:scale-110 transition" onclick="openModal()">Start Shopping</button>
+  </div>
+</section>
+
+<!-- Products Section -->
+<section id="section2" class="max-w-7xl mx-auto py-24 px-6">
+  <h2 class="text-4xl font-bold text-center mb-12 animate-fadeUp">Our Products</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <!-- Product Card -->
+    <div class="bg-white rounded-xl shadow-lg p-6 hover:scale-105 transition relative" onmouseenter="showPopover(event,'Amazing gadget')">
+      <img src="https://source.unsplash.com/400x300/?electronics" class="rounded-lg mb-4">
+      <h3 class="text-2xl font-bold mb-2">Gadget Pro</h3>
+      <p class="mb-4">High-tech gadget for your daily life.</p>
+      <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition" onclick="openModal()">Buy Now</button>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6 hover:scale-105 transition relative" onmouseenter="showPopover(event,'Stylish shoes')">
+      <img src="https://source.unsplash.com/400x300/?shoes" class="rounded-lg mb-4">
+      <h3 class="text-2xl font-bold mb-2">Sneaker X</h3>
+      <p class="mb-4">Comfortable and trendy sneakers.</p>
+      <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition" onclick="openModal()">Buy Now</button>
+    </div>
+    <div class="bg-white rounded-xl shadow-lg p-6 hover:scale-105 transition relative" onmouseenter="showPopover(event,'Fancy watch')">
+      <img src="https://source.unsplash.com/400x300/?watch" class="rounded-lg mb-4">
+      <h3 class="text-2xl font-bold mb-2">Watch Elite</h3>
+      <p class="mb-4">Premium watch for all occasions.</p>
+      <button class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition" onclick="openModal()">Buy Now</button>
+    </div>
+  </div>
+</section>
+
+<!-- Deals Section -->
+<section id="section3" class="bg-gray-200 py-24 px-6">
+  <h2 class="text-4xl font-bold text-center mb-12 animate-fadeUp">Hot Deals</h2>
+  <div class="flex flex-wrap justify-center gap-6">
+    <img src="https://source.unsplash.com/250x250/?bag" class="rounded-lg hover:scale-110 transition cursor-pointer" onmouseenter="showPopover(event,'Limited offer bag')">
+    <img src="https://source.unsplash.com/250x250/?headphones" class="rounded-lg hover:scale-110 transition cursor-pointer" onmouseenter="showPopover(event,'Headphones sale')">
+    <img src="https://source.unsplash.com/250x250/?camera" class="rounded-lg hover:scale-110 transition cursor-pointer" onmouseenter="showPopover(event,'Camera special')">
+    <img src="https://source.unsplash.com/250x250/?laptop" class="rounded-lg hover:scale-110 transition cursor-pointer" onmouseenter="showPopover(event,'Laptop deal')">
+  </div>
+</section>
+
+<!-- Contact Section -->
+<section id="section4" class="py-24 px-6 max-w-4xl mx-auto">
+  <h2 class="text-4xl font-bold text-center mb-12 animate-fadeUp">Contact Us</h2>
+  <form class="flex flex-col gap-4 bg-white p-8 rounded-xl shadow-lg">
+    <input type="text" placeholder="Your Name" class="border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none">
+    <input type="email" placeholder="Email" class="border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none">
+    <textarea placeholder="Message" class="border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+    <button class="bg-indigo-600 text-white px-6 py-3 rounded hover:bg-indigo-700 transition">Send</button>
+  </form>
+</section>
+
+</div>
+
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center hidden z-50">
+  <div class="bg-white rounded-xl p-8 max-w-md text-center relative">
+    <button onclick="closeModal()" class="absolute top-2 right-2 text-xl font-bold">&times;</button>
+    <h2 class="text-2xl font-bold mb-4">Purchase Item</h2>
+    <p class="mb-4">This is just a demo modal for your item.</p>
+    <button class="bg-indigo-600 text-white px-6 py-3 rounded hover:bg-indigo-700 transition">Confirm</button>
+  </div>
+</div>
+
+<!-- Popover -->
+<div id="popover" class="popover"></div>
+
+<script>
+// Modal functions
+function openModal(){
+    document.getElementById('modal').classList.remove('hidden');
+}
+function closeModal(){
+    document.getElementById('modal').classList.add('hidden');
+}
+
+// Popover functions
+function showPopover(event, text){
+    const pop = document.getElementById('popover');
+    pop.innerText = text;
+    pop.style.display = 'block';
+    pop.style.left = event.pageX + 10 + 'px';
+    pop.style.top = event.pageY + 10 + 'px';
+}
+document.addEventListener('mousemove', () => {
+    document.getElementById('popover').style.display = 'none';
+});
+</script>
+
+</body>
+</html>
