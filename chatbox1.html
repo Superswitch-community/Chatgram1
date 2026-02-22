@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ChatGram - My Social Media</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body id="body" class="bg-gray-100 flex items-center justify-center h-screen transition-colors duration-300">
+
+<div class="w-full max-w-md h-[95vh] bg-white dark:bg-gray-900 shadow-2xl rounded-2xl flex flex-col overflow-hidden transition-colors duration-300">
+
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 flex items-center justify-between">
+        <h1 class="text-lg font-bold">ChatGram</h1>
+        <div class="flex gap-2">
+            <button onclick="toggleDark()" class="bg-white text-black px-2 py-1 rounded text-xs">🌙</button>
+            <button onclick="clearChat()" class="bg-red-500 px-2 py-1 rounded text-xs">Clear</button>
+        </div>
+    </div>
+
+    <!-- Chat Area -->
+    <div id="chatBox" class="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50 dark:bg-gray-800 transition-colors duration-300">
+    </div>
+
+    <!-- Input -->
+    <div class="p-3 border-t dark:border-gray-700 flex gap-2 bg-white dark:bg-gray-900">
+        <input 
+            type="text"
+            id="userInput"
+            placeholder="Type a message..."
+            class="flex-1 border dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+        >
+        <button onclick="sendMessage()" class="bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition">
+            Send
+        </button>
+    </div>
+
+</div>
+
+<script>
+
+const chatBox = document.getElementById("chatBox");
+const userInput = document.getElementById("userInput");
+const body = document.getElementById("body");
+
+// Load saved messages
+window.onload = function(){
+    const saved = localStorage.getItem("chatgram");
+    if(saved){
+        chatBox.innerHTML = saved;
+        scrollDown();
+    } else {
+        addBotMessage("Hello 👋 I'm ChatGram Bot. Start chatting!");
+    }
+}
+
+// Enter key send
+userInput.addEventListener("keypress", function(e){
+    if(e.key === "Enter"){
+        sendMessage();
+    }
+});
+
+function sendMessage(){
+    const message = userInput.value.trim();
+    if(message === "") return;
+
+    addUserMessage(message);
+    userInput.value = "";
+    scrollDown();
+
+    showTyping();
+
+    setTimeout(() => {
+        removeTyping();
+        botReply(message);
+    }, 1200);
+}
+
+function addUserMessage(text){
+    const msg = `
+    <div class="flex justify-end items-end gap-2 animate-fade">
+        <div class="bg-indigo-600 text-white p-3 rounded-2xl max-w-xs shadow">
+            ${text}
+        </div>
+        <img src="https://i.pravatar.cc/40?img=3" class="w-8 h-8 rounded-full">
+    </div>`;
+    chatBox.innerHTML += msg;
+    saveChat();
+}
+
+function addBotMessage(text){
+    const msg = `
+    <div class="flex items-end gap-2 animate-fade">
+        <img src="https://i.pravatar.cc/40?img=5" class="w-8 h-8 rounded-full">
+        <div class="bg-gray-300 dark:bg-gray-700 dark:text-white p-3 rounded-2xl max-w-xs shadow">
+            ${text}
+        </div>
+    </div>`;
+    chatBox.innerHTML += msg;
+    saveChat();
+    scrollDown();
+}
+
+function botReply(message){
+    let reply = "I don't understand that yet 🤖";
+
+    const msg = message.toLowerCase();
+
+    if(msg.includes("hello") || msg.includes("hi")){
+        reply = "Hey there! 😊";
+    }
+    else if(msg.includes("how are you")){
+        reply = "I'm functioning perfectly! ⚡";
+    }
+    else if(msg.includes("name")){
+        reply = "I'm ChatGram Bot, your AI buddy.";
+    }
+    else if(msg.includes("time")){
+        reply = "Current time is " + new Date().toLocaleTimeString();
+    }
+    else if(msg.includes("love")){
+        reply = "Spread love everywhere 💙";
+    }
+    else if(msg.includes("bye")){
+        reply = "See you soon 👋";
+    }
+
+    addBotMessage(reply);
+}
+
+function showTyping(){
+    const typing = `
+    <div id="typing" class="flex items-center gap-2">
+        <img src="https://i.pravatar.cc/40?img=5" class="w-8 h-8 rounded-full">
+        <div class="bg-gray-300 dark:bg-gray-700 dark:text-white px-4 py-2 rounded-2xl text-sm animate-pulse">
+            Bot is typing...
+        </div>
+    </div>`;
+    chatBox.innerHTML += typing;
+    scrollDown();
+}
+
+function removeTyping(){
+    const typing = document.getElementById("typing");
+    if(typing) typing.remove();
+}
+
+function scrollDown(){
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function saveChat(){
+    localStorage.setItem("chatgram", chatBox.innerHTML);
+}
+
+function clearChat(){
+    localStorage.removeItem("chatgram");
+    chatBox.innerHTML = "";
+    addBotMessage("Chat cleared! Start again 😊");
+}
+
+function toggleDark(){
+    body.classList.toggle("bg-gray-100");
+    body.classList.toggle("bg-gray-900");
+    body.classList.toggle("dark");
+}
+
+</script>
+
+</body>
+</html>
