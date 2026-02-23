@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WhatsApp Chats</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-[#111b21] text-white font-sans">
+
+<!-- Header -->
+<div class="bg-[#202c33] px-4 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">WhatsApp</h1>
+    <div class="text-2xl cursor-pointer">⋮</div>
+</div>
+
+<!-- Search -->
+<div class="p-3 bg-[#111b21]">
+    <input 
+        type="text"
+        placeholder="Search or start new chat"
+        class="w-full bg-[#202c33] text-white px-4 py-2 rounded-full outline-none"
+    >
+</div>
+
+<!-- Chat List -->
+<div id="chatList" class="divide-y divide-[#222e35]"></div>
+
+<script>
+const users = [
+"David Johnson","Sophia Lee","Michael Brown","Blessing Okoro","John Smith",
+"Mary Ajayi","Daniel Wilson","Grace Adams","Emmanuel King","Victoria James",
+"James White","Chioma Eze","Samuel Green","Ruth Johnson","Peter Obi",
+"Esther Williams","Anthony Cole","Precious Daniel","Joseph Taylor","Joy Martins"
+];
+
+const messages = [
+"Hey, how are you?",
+"Let's meet tomorrow.",
+"Send me the file please.",
+"I'll call you later.",
+"Thank you so much!",
+"See you soon.",
+"Are you coming?",
+"Good morning 😊",
+"That sounds good.",
+"Okay no problem."
+];
+
+const chatList = document.getElementById("chatList");
+
+users.forEach((user, i) => {
+    const unread = Math.random() > 0.5;
+    const time = `${Math.floor(Math.random()*12+1)}:${Math.floor(Math.random()*59).toString().padStart(2,'0')} PM`;
+
+    const chat = document.createElement("div");
+    chat.className = "flex items-center px-4 py-3 hover:bg-[#202c33] cursor-pointer";
+
+    chat.innerHTML = `
+        <img src="https://i.pravatar.cc/150?img=${i+1}" 
+             class="w-12 h-12 rounded-full mr-4 object-cover">
+
+        <div class="flex-1">
+            <div class="flex justify-between items-center">
+                <span class="font-semibold">${user}</span>
+                <span class="text-xs text-gray-400">${time}</span>
+            </div>
+
+            <div class="flex justify-between items-center mt-1">
+                <span class="text-sm text-gray-400 truncate w-44">
+                    ${messages[Math.floor(Math.random()*messages.length)]}
+                </span>
+                ${unread ? `
+                    <span class="bg-[#00a884] text-xs text-white w-5 h-5 flex items-center justify-center rounded-full ml-2">
+                        ${Math.floor(Math.random()*5+1)}
+                    </span>
+                ` : ``}
+            </div>
+        </div>
+    `;
+
+    chatList.appendChild(chat);
+});
+</script>
+
+</body>
+</html>
